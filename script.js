@@ -12,7 +12,6 @@
 //     localStorage.setItem('item', empArray);
 // }
 // buttonAdd.addEventListener('click', saveItems);
-
 const inputItem = document.getElementById('input-element');
 const buttonAdd = document.getElementById('button-add');
 function saveItems()
@@ -20,15 +19,21 @@ function saveItems()
     let storedData = localStorage.getItem('items');
     let empArray = storedData ? JSON.parse(storedData) : [];
     let inputValue = inputItem.value;
-    let obj = {
-        inputValue
-    };
+    if (inputValue)
+    {
+        var obj = {
+            inputValue
+        };
+        empArray.push(obj);
+        localStorage.setItem('items', JSON.stringify(empArray));
+    }
+    else
+    {
+        alert('Please enter a value');
+    }
     window.location.reload();
-    empArray.push(obj);
-    localStorage.setItem('items', JSON.stringify(empArray));
 }
 buttonAdd.addEventListener('click', saveItems);
-
 function init()
 {
     let parent = document.getElementById('parent-list');
@@ -38,7 +43,17 @@ function init()
     for (let i of arrList)
     {
         const li = document.createElement('li');
-        li.innerText = i.inputValue;
+        li.innerHTML = ` ${i.inputValue}
+         <button id='delete-btn'>Delete</button>`;
         parent.append(li);
+        const deleteBtn = li.querySelector('#delete-btn');
+        deleteBtn.addEventListener('click', () =>
+        {
+            arrList = arrList.filter(item => item.inputValue !== i.inputValue);
+            localStorage.setItem('items', JSON.stringify(arrList));
+            parent.removeChild(li);
+        });
     }
 }
+
+
